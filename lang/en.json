@@ -1,0 +1,32 @@
+{
+  "Clients" : "Clients",
+  "Incomes" : "Incomes",
+  "Outcomes" : "Outcomes",
+  "Users"   : "Users",
+
+  "Subcategory Name" : "Subcategory Name",
+  "Subcategories" : "Subcategories",
+  "Create Subcategory" : "Create Subcategory",
+  "Category" : "Category",
+  "Categories" : "Categories",
+  "Category Name" : "Category Name",
+  "Category Type" : "Category Type",
+
+  "Clients Management" : "Clients Management",
+  "Create Client" : "Create Client",
+
+  "Add Client Type" : "Add Client Type",
+  "Edit Client Type" : "Edit Client Type",
+  "Type Name" : "Type Name",
+
+  "Client First" : "Client First",
+  "Client Last" : "Client Last",
+  "Full Name" : "Full Name",
+  "Type" : "Type",
+  "Email" : "Email",
+  "Phone" : "Phone",
+  "Created At" : "Created At",
+  "Updated At" : "Updated At",
+  "Unknown" : "Unknown",
+  "Save" : "Save"
+}

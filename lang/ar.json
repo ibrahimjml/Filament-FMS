@@ -1,0 +1,33 @@
+{
+  "Clients" : "العملاء",
+  "Incomes" : "الايرادات",
+  "Outcomes" : "المصروفات",
+  "Users" : "المستخدمين",
+
+  "Subcategory Name" : "اسم القسم الفرعي",
+  "Subcategories" : "الاقسام الفرعية",
+  "Create Subcategory" : "إنشاء قسم فرعي",
+  "Category" : "القسم",
+  "Categories" : "الاقسام",
+  "Category Name" : "اسم القسم",
+  "Category Type" : "نوع القسم",
+
+  "Clients Management" : "إدارة العملاء",
+  "Create Client" : "إنشاء عميل",
+
+    "Add Client Type" : "إضافة نوع العميل",
+  "Edit Client Type" : "تعديل نوع العميل",
+  "Type Name" : "اسم نوع العميل",
+
+  "Client First" : "الاسم الاول",
+  "Client Last" : "الاسم الاخير",
+  "Full Name" : "الاسم الكامل",
+  "Type" : "النوع",
+  "Email" : "البريد الالكتروني",
+  "Phone" : "الهاتف",
+  "Created At" : "تاريخ الانشاء",
+  "Updated At" : "تاريخ التحديث",
+  "Unknown" : "غير معروف",
+  "Save" : "حفظ"
+
+}

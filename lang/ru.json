@@ -1,0 +1,15 @@
+{
+  "Clients": "Клиенты",
+  "Clients Management": "Управление клиентами",
+  "Incomes": "Поступления",
+  "Users": "Пользователи",
+
+  "Client First": "Имя",
+  "Client Last": "Фамилия", 
+  "Full Name": "ФИО", 
+  "Client Email": "Email клиента",
+  "Client Phone": "Телефон клиента",
+  "Created At": "Создано",
+  "Updated At": "Обновлено",
+  "Unknown": "Неизвестный"
+}
