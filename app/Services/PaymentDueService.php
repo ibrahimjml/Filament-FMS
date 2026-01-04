@@ -68,4 +68,15 @@ class PaymentDueService
               
         ;
     }
+public function byPriority()
+{
+    return Income::query()
+        ->with([
+            'client',
+            'unpaidPayments' => fn($q) => $q->where('is_priority', 1)->orderBy('next_payment'),
+        ])
+        ->withSum('paidPayments', 'payment_amount')
+        ->whereHas('client')
+        ->whereHas('unpaidPayments', fn($q) => $q->where('is_priority', 1));
+}
 }

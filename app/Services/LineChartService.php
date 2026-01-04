@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PaymentStatus;
 use App\Models\Outcome;
 use App\Models\Payment;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +13,11 @@ class LineChartService
   public function getDashboardData()
   {
     $currrentMonth = now()->startOfMonth();
+    $endofMonth = now()->endOfMonth();
 
     return [
       'lineData' => $this->getLineData($currrentMonth),
+      'profitData' => $this->getProfitData($currrentMonth, $endofMonth),
     ];
   }
   protected function getLineData($month)
@@ -62,5 +65,30 @@ class LineChartService
 
 
     return $dailyData;
+  }
+  protected function getProfitData($currrentMonth, $endofMonth)
+  {
+    $dailyProfit = Payment::query()
+      ->where('status', PaymentStatus::PAID)
+      ->whereBetween('created_at', [$currrentMonth, $endofMonth])
+      ->selectRaw('DATE(created_at) as date, SUM(payment_amount) as total')
+      ->groupBy('date')
+      ->pluck('total', 'date');
+
+    $labels = [];
+    $profits = [];
+
+    for ($d = 1; $d <= $currrentMonth->daysInMonth; $d++) {
+      $date = $currrentMonth->copy()->day($d)->toDateString();
+
+      $labels[]  = $currrentMonth->copy()->day($d)->format('M j');
+      $profits[] = $dailyProfit[$date] ?? 0;
+    }
+    array_unshift($profits, 0);
+    array_unshift($labels, '');
+    return [
+      'labels' => $labels,
+      'profit' => $profits,
+    ];
   }
 }

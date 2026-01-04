@@ -31,6 +31,7 @@ class Payment extends Model
        'income_id',
        'payment_amount',
        'description',
+       'is_priority',
        'status',
        'next_payment',
        'paid_at',
@@ -40,5 +41,9 @@ class Payment extends Model
     public function income(): BelongsTo
     {
         return $this->belongsTo(Income::class, 'income_id');
+    }
+    public function isPriority()
+    {
+      return $this->is_priority === 1;
     }
 }

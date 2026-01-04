@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Services\LineChartService;
 use Filament\Widgets\ChartWidget;
 
 class ProfitChart extends ChartWidget
@@ -11,20 +12,26 @@ class ProfitChart extends ChartWidget
   protected static ?int $sort = 3;
   public function getHeading(): ?string
   {
-    return __('Profit Data');
+    return __('Profit Data for') . ' ' . now()->monthName;
   }
 
   protected function getData(): array
   {
+    $profit = app(LineChartService::class)->getDashboardData();
+    $profitData = $profit['profitData'];
+
     return [
       'datasets' => [
         [
-          'label' => 'Orders',
-          'data' => [2433, 3454, 4566, 3300, 5545, 5765, 6787, 8767, 7565, 8576, 9686, 8996],
-          'fill' => 'start',
+          'label' => __('Profit') . ' (' . __('Total Paid') . ')',
+          'data' => $profitData['profit'],
+          'backgroundColor' => 'rgba(34, 197, 94, 0.6)',
+          'fill' => false,
+        
+
         ],
       ],
-      'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      'labels' => $profitData['labels'],
     ];
   }
 
@@ -32,4 +39,16 @@ class ProfitChart extends ChartWidget
   {
     return 'line';
   }
+protected function getOptions(): array
+{
+    return [
+        'responsive' => true,
+        'maintainAspectRatio' => false,
+        'plugins' => [
+            'legend' => [
+                'position' => 'top',
+            ],
+        ],
+    ];
+}
 }

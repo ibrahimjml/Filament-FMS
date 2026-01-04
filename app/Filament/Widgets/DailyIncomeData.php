@@ -12,7 +12,7 @@ class DailyIncomeData extends ChartWidget
   protected static ?int $sort = 2;
   public function getHeading(): ?string
   {
-    return __('Daily Income Data for') . ' ' . now()->monthName;
+    return __('Daily Income, Outcome Data for') . ' ' . now()->monthName;
   }
 
 protected function getData(): array
