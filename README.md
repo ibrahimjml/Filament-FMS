@@ -16,6 +16,7 @@
 ![Incomes](https://i.postimg.cc/1RMM4Xtn/Screenshot-2026-01-03-173110.png)
 ![Income detail](https://i.postimg.cc/4yKKJWnC/Screenshot-2026-01-03-173256.png)
 ![Categories](https://i.postimg.cc/WbgGg4px/Screenshot-2026-01-03-173001.png)
+![Payments Schedule](https://i.postimg.cc/dt2V91Hr/Screenshot-2026-01-04-161241.png)
 ![Reports](https://i.postimg.cc/FRkdvPYN/Screenshot-2026-01-03-172756.png)
 
 ## INSTALLATION
