@@ -22,4 +22,10 @@ return [
         'onetime' => 'دفع مرة واحدة',
         'recurring' => 'دفع متكرر',
       ],
+  'invoice_status' => [
+        'pending' => 'قيد الانتظار',
+        'partial' => 'مجزوم',
+        'paid' => 'مدفوع',
+        'overdue' => 'متأخر',
+      ]
 ];

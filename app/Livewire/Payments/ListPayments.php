@@ -32,12 +32,6 @@ class ListPayments extends Component implements HasActions, HasSchemas, HasTable
 
   protected $listeners = ['paymentPriority' => '$refresh'];
 
-  public function switchPaymentsTab(string $type): void
-  {
-    $this->type = $type;
-    $this->resetTable();
-  }
-
   public function table(Table $table): Table
   {
     $table = IncomeResource::table($table);

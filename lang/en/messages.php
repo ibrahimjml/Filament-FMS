@@ -22,4 +22,10 @@ return [
         'onetime' => 'Onetime',
         'recurring' => 'Recurring',
       ],
+      'invoice_status' => [
+        'pending' => 'Pending',
+        'partial' => 'Partial',
+        'paid' => 'Paid',
+        'overdue' => 'Overdue',
+      ]
 ];

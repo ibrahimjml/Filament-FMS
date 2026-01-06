@@ -23,19 +23,22 @@ class Payment extends Model
     ];
 
     protected $casts = [
+        'is_priority' => 'boolean',
+        'paid_at' => 'date',
         'status' => PaymentStatus::class,
         'payment_amount' => 'decimal:2',
         'next_payment' => 'date',
     ];
    protected $fillable = [
        'income_id',
+       'discount_id',
+       'invoice_id',
        'payment_amount',
        'description',
        'is_priority',
        'status',
        'next_payment',
        'paid_at',
-       'discount_id',
    ];
 
     public function income(): BelongsTo
@@ -45,5 +48,13 @@ class Payment extends Model
     public function isPriority()
     {
       return $this->is_priority === 1;
+    }
+    public function discount(): BelongsTo
+    {
+      return $this->belongsTo(Discount::class, 'discount_id');
+    }
+    public function invoice(): BelongsTo
+    {
+      return $this->belongsTo(Invoice::class, 'invoice_id');
     }
 }
