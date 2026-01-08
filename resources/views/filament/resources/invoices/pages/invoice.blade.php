@@ -15,10 +15,11 @@
         </p>
       </div>
 
-      <img src="{{ asset('logo.jpg') }}" alt="Company Logo" class="h-16 object-contain" />
+      <img src="{{ $invoice->setting?->logo ?? asset('logo.jpg') }}" alt="Company Logo" class="h-16 object-contain" />
+
     </div>
 
-    {{-- Billing Information --}}
+    {{-- Billing To Information --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <div>
         <h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-2">
@@ -28,22 +29,20 @@
         <p class="text-sm text-gray-600 dark:text-gray-400">{{ $invoice->client->client_phone }}</p>
         <p class="text-sm text-gray-600 dark:text-gray-400">{{ $invoice->client->email }}</p>
       </div>
-
+   {{-- Billing From Information --}}
       <div class="md:text-right">
         <h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-2">
-          FMS.co
+          {{$invoice->setting_snapshot['company_name']}}
         </h2>
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          Current Company
+          {{$invoice->setting_snapshot['company_phone']}}
         </p>
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          Lebanon/Tripoli
+          {{$invoice->setting_snapshot['company_address']}}
         </p>
+      
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          00000
-        </p>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          info@fms.com
+          {{$invoice->setting_snapshot['company_email']}}
         </p>
       </div>
     </div>
@@ -72,9 +71,11 @@
         </thead>
 
         <tbody>
+          @foreach ($invoice->payments as $payment)
+          
           <tr class="border-t border-gray-200 dark:border-gray-700">
             <td class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
-              {!!  $invoice->payment->description ?? 'N/A' !!}
+              {!!  $payment->description ?? 'N/A' !!}
             </td>
             <td class="px-4 py-2 text-sm text-right text-gray-600 dark:text-gray-400">
               {{ $invoice->income->subcategory?->category?->name . ' - ' . $invoice->income->subcategory?->name }}
@@ -83,33 +84,36 @@
               {{ $invoice->income->amount }}
             </td>
             <td class="px-4 py-2 text-sm text-right text-gray-600 dark:text-gray-400">
-              {{ $invoice->payment->payment_amount }}
+              {{ $payment->payment_amount }}
             </td>
             <td class="px-4 py-2 text-sm text-right text-gray-600 dark:text-gray-400">
-            {{ $invoice->amount - ($invoice->payment->payment_amount) }}
+            {{ $payment->payment_amount }}
             </td>
           </tr>
-        
+        @endforeach
         </tbody>
 @php
-    $paymentAmount = $invoice->payment?->payment_amount ?? 0;
+    $paymentAmount = $invoice->payments?->sum('payment_amount') ?? 0;
     $discount = $invoice->income->discount_amount ?? 0;
+    $finalamount =  $invoice->income->final_amount > 0
+                     ? $invoice->income->final_amount 
+                     : $invocie->income->amount;
 @endphp
         <tfoot class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <td colspan="4" class="px-4 py-2 text-right font-semibold text-gray-700 dark:text-gray-200">
+              {{$invoice->income->final_amount > 0 ? 'subtotal after discount' : 'subtotal'}}
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">
+              $ {{ number_format($finalamount, 2) }}
+            </td>
+          </tr>
           <tr>
             <td colspan="4" class="px-4 py-2 text-right font-semibold text-gray-700 dark:text-gray-200">
               total paid
             </td>
             <td class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">
               $ {{ number_format($paymentAmount, 2) }}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" class="px-4 py-2 text-right font-semibold text-gray-700 dark:text-gray-200">
-              Discount
-            </td>
-            <td class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">
-              $ {{ number_format($discount, 2) }}
             </td>
           </tr>
           <tr>
@@ -126,16 +130,13 @@
   <div class="mt-8 flex justify-between items-start text-sm text-gray-500 dark:text-gray-400">
   <!-- Left content -->
   <div class="text-left">
-    <p>Best Regards,</p>
-    <p>Ibrahim jml</p>
     <p>
-      Any question, contact us at
+      <p>{!! nl2br(e($invoice->setting_snapshot['footer'])) !!}</p>
       <span class="font-medium text-gray-700 dark:text-gray-300">
-        info@fms.com
+        {{ $invoice->setting_snapshot['company_email'] }}
       </span>
     </p>
   </div>
-
   <!-- Right status -->
   <p class="border-2 border-red-400 p-4 -rotate-45 whitespace-nowrap">
     {{ $invoice->status->getLabel() }}

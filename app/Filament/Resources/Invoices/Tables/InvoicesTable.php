@@ -4,9 +4,9 @@ namespace App\Filament\Resources\Invoices\Tables;
 
 use App\Filament\Resources\Invoices\InvoiceResource;
 use App\Models\Invoice;
-use Dom\Text;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -42,7 +42,7 @@ class InvoicesTable
                       ->sortable(),
                 TextColumn::make('payment_amount')
                     ->label(__('paid'))
-                    ->state(fn($record) => $record->payment?->payment_amount)
+                    ->state(fn($record) => $record->payments?->sum('payment_amount'))
                     ->money()
                     ->sortable(),
                     TextColumn::make('status')
@@ -93,6 +93,10 @@ class InvoicesTable
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('info')
                     ->url(fn(Invoice $record) => route('invoice.pdf',['invoice'=>$record])),
+                DeleteAction::make()
+                    ->hiddenLabel()
+                    ->icon('heroicon-o-trash')
+                    ->color('danger'),    
             
             ])
             ->toolbarActions([

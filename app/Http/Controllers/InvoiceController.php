@@ -21,6 +21,6 @@ class InvoiceController extends Controller
     }
     public function getInvoiceDetail($invoice)
     {
-      return Invoice::with(['client','payment','income.subcategory.category'])->findOrFail($invoice->invoice_id);
+      return Invoice::with(['client','payments','income.subcategory.category'])->findOrFail($invoice->invoice_id);
     }
 }

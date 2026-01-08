@@ -67,20 +67,31 @@ class InvoiceForm
 
                         Select::make('payment_id')
                           ->label(__('Payment'))
-                          ->options(
-                            fn(Get $get) =>
-                            $get('income_id')
-                              ? \App\Models\Payment::where('income_id', $get('income_id'))
+                          ->multiple()
+                          ->reactive()
+                          ->searchable()
+                          ->options(function (Get $get, $livewire) {
+                            $incomeId  = $get('income_id');
+                            $invoiceId = $livewire->record?->invoice_id;
+
+                            if (! $incomeId) {
+                              return [];
+                            }
+
+                            return \App\Models\Payment::where('income_id', $incomeId)
+                              ->where(function ($query) use ($invoiceId) {
+                                $query
+                                  ->whereNull('invoice_id')               
+                                  ->orWhere('invoice_id', $invoiceId); 
+                              })
                               ->get()
                               ->mapWithKeys(fn($payment) => [
                                 $payment->payment_id =>
                                 '$ ' . number_format($payment->payment_amount)
                                   . ' — ' . $payment->status?->getLabel(),
-                              ])
-                              : []
-                          )
-                          ->searchable()
-                          ->required(fn(Get $get) => $get('active_tab') === 0),
+                              ]);
+                          })
+                          ->required(),
                       ])->columns(1),
                   ]),
                 Grid::make(1)

@@ -16,6 +16,6 @@ class Invoice extends Page
     public function mount($record)
     {
       $this->record = $record;
-      $this->invoice = InvoiceModel::with(['client','payment','income.subcategory.category'])->findOrFail($record);
+      $this->invoice = InvoiceModel::with(['client','payments','income.subcategory.category'])->findOrFail($record);
     }
 }

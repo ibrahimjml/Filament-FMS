@@ -108,40 +108,58 @@ return new class extends Migration
             $table->index(['subcategory_id','date']);
             $table->index('deleted_at');
           });
-        Schema::create('payments', function (Blueprint $table) {
-          $table->id('payment_id');
-          $table->unsignedBigInteger('income_id');
-          $table->unsignedBigInteger('discount_id')->nullable(); 
-          $table->decimal('payment_amount', 10, 2)->default(0.00);
-          $table->string('status')->index();
-          $table->text('description')->nullable();
-          $table->date('next_payment')->nullable()->index();
-          $table->date('paid_at')->nullable();
-          $table->timestamps();
-          $table->softDeletes();
-
-          $table->foreign('discount_id')->references('discount_id')->on('discounts')->onDelete('cascade'); 
-          $table->foreign('income_id')->references('income_id')->on('incomes')->onDelete('cascade');
-      
-          $table->index(['income_id','status']);
-          $table->index('deleted_at');
-        });
+          Schema::create('invoice_settings', function (Blueprint $table) {
+            $table->id('invoice_setting_id');
+            $table->string('company_name');
+            $table->string('company_email')->nullable();
+            $table->string('company_phone')->nullable();
+            $table->text('company_address')->nullable();
+            $table->string('logo')->nullable();
+            $table->text('footer')->nullable();
+            $table->json('extra')->nullable(); 
+            $table->timestamps();
+          });
           Schema::create('invoices', function (Blueprint $table) {
             $table->id('invoice_id');
+            $table->string('invoice_number')->unique();
+            $table->unsignedBigInteger('invoice_setting_id')->nullable();
+            $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('income_id');
-            $table->unsignedBigInteger('payment_id')->nullable();
             $table->decimal('amount', 10, 2);
             $table->decimal('payment_amount', 10, 2)->nullable();
             $table->text('description')->nullable();
+            $table->json('setting_snapshot');
             $table->date('issue_date');
             $table->date('due_date')->nullable();
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
-
+            
+            $table->foreign('invoice_setting_id')->references('invoice_setting_id')->on('invoice_settings')->onDelete('cascade');
+            $table->foreign('client_id')->references('client_id')->on('clients')->onDelete('set null');
             $table->foreign('income_id')->references('income_id')->on('incomes')->onDelete('cascade');
-            $table->foreign('payment_id')->references('payment_id')->on('payments')->onDelete('set null');
           });    
+          Schema::create('payments', function (Blueprint $table) {
+            $table->id('payment_id');
+            $table->unsignedBigInteger('income_id');
+            $table->unsignedBigInteger('discount_id')->nullable(); 
+            $table->unsignedBigInteger('invoice_id')->nullable();
+            $table->decimal('payment_amount', 10, 2)->default(0.00);
+            $table->string('status')->index();
+            $table->boolean('is_priority')->default(false);
+            $table->text('description')->nullable();
+            $table->date('next_payment')->nullable()->index();
+            $table->date('paid_at')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+  
+            $table->foreign('income_id')->references('income_id')->on('incomes')->onDelete('cascade');
+            $table->foreign('discount_id')->references('discount_id')->on('discounts')->onDelete('set null'); 
+            $table->foreign('invoice_id')->references('invoice_id')->on('invoices')->onDelete('set null');
+  
+            $table->index(['income_id','status']);
+            $table->index('deleted_at');
+          });
             Schema::create('events', function (Blueprint $table) {
             $table->id('event_id');
             $table->string('event_name',255);
@@ -166,6 +184,7 @@ return new class extends Migration
         Schema::dropIfExists('incomes');
         Schema::dropIfExists('outcomes');
         Schema::dropIfExists('payments');
+        Schema::dropIfExists('invoice_settings');
         Schema::dropIfExists('invoices');
         Schema::dropIfExists('events');
     }

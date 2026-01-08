@@ -15,20 +15,22 @@ class Invoice extends Model
   protected $primaryKey = 'invoice_id';
   protected $dates = ['deleted_at'];
   protected $casts = [
-    'amount' => 'decimal:2',
-    'payment_amount' => 'decimal:2',
-    'status' => InvoiceStatus::class,
-    'issue_date' => 'date',
-    'due_date' => 'date'
+    'amount'           => 'decimal:2',
+    'payment_amount'   => 'decimal:2',
+    'status'           => InvoiceStatus::class,
+    'setting_snapshot' => 'array',
+    'issue_date'       => 'date',
+    'due_date'         => 'date'
   ];
   protected $fillable = [
     'invoice_number',
+    'invoice_setting_id',
     'income_id',
-    'payment_id',
     'client_id',
     'amount',
     'payment_amount',
     'description',
+    'setting_snapshot',
     'status',
     'issue_date',
     'due_date'
@@ -41,14 +43,18 @@ class Invoice extends Model
   {
     return $this->belongsTo(Income::class, 'income_id');
   }
-  public function payment(): BelongsTo
+  public function payments(): HasMany
   {
-    return $this->belongsTo(Payment::class, 'payment_id');
+    return $this->hasMany(Payment::class, 'invoice_id');
   }
-  public function getRemainingAttribute(): float
+   public function setting(): BelongsTo
+    {
+        return $this->belongsTo(InvoiceSetting::class, 'invoice_setting_id');
+    }
+public function getRemainingAttribute(): float
 {
     $discount = $this->income?->discount_amount ?? 0;
-    $paid = $this->payment?->payment_amount ?? 0;
+    $paid = $this->payments()->sum('payment_amount'); 
     return max(($this->amount - $discount) - $paid, 0);
 }
 }
