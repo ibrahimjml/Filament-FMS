@@ -18,8 +18,8 @@
 ![Categories](https://i.postimg.cc/WbgGg4px/Screenshot-2026-01-03-173001.png)
 ![Payments Schedule](https://i.postimg.cc/dt2V91Hr/Screenshot-2026-01-04-161241.png)
 ![Reports](https://i.postimg.cc/FRkdvPYN/Screenshot-2026-01-03-172756.png)
-![Invoice](https://i.postimg.cc/V6m61vkT/Screenshot-2026-01-06-123343.png)
-![Invoices](https://i.postimg.cc/8kn1XtLP/Screenshot-2026-01-06-123844.png)
+![Invoice](https://i.postimg.cc/hjSqYFvv/Screenshot-2026-01-08-233653.png)
+![Invoices](https://i.postimg.cc/zX9YrH3G/Screenshot-2026-01-08-234657.png)
 
 ## INSTALLATION
 
