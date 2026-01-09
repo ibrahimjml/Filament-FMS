@@ -106,7 +106,7 @@ class ListPayments extends Component implements HasActions, HasSchemas, HasTable
     return match ($this->type) {
       'outdated' => app(PaymentDueService::class)->overdue(),
       'today'    => app(PaymentDueService::class)->today(),
-      'priority' =>app(PaymentDueService::class)->byPriority(),
+      'priority' => app(PaymentDueService::class)->byPriority(),
       default    => app(PaymentDueService::class)->upcoming(),
     };
   }

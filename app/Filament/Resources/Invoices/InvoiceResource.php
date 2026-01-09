@@ -8,6 +8,7 @@ use App\Filament\Resources\Invoices\Pages\Invoice as PageInvoice;
 use App\Filament\Resources\Invoices\Pages\ListInvoices;
 use App\Filament\Resources\Invoices\Schemas\InvoiceForm;
 use App\Filament\Resources\Invoices\Tables\InvoicesTable;
+use App\Livewire\PaidInvoices;
 use App\Models\Invoice;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -60,5 +61,11 @@ class InvoiceResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+    public static function getWidgets(): array
+    {
+      return [
+         PaidInvoices::class
+      ];
     }
 }

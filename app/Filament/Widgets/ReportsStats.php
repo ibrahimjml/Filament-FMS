@@ -62,7 +62,12 @@ class ReportsStats extends StatsOverviewWidget
         ->color(
           $data['profit'] >= 0 ? 'success' : 'danger'
         ),
-        Stat::make(__('Total Upcoming Payments'), $data['total_upcoming_payments'])
+      Stat::make(__('Total Upcoming Payments'), $data['total_upcoming_payments']),
+      Stat::make(__('Total Paid Invoices'), '$ '.number_format($data['total_paid_invoices']))
+        ->description(__('Total Paid Invoices in ') . $this->dateLabel())
+        ->icon('heroicon-m-receipt-percent')
+        ->color('primary'),
+
     ];
   }
 }

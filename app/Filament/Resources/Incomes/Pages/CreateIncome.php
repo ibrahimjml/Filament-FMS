@@ -60,12 +60,18 @@ class CreateIncome extends CreateRecord
             throw new \Exception('Paid amount cannot be greater than the total due amount.');
         }
 
-        Payment::create([
+      $payment =  Payment::create([
             'income_id'      => $income->income_id,
             'payment_amount' => $this->paid,
             'status'         => PaymentStatus::from($this->payment_status),
             'next_payment'   => $this->next_payment, 
         ]);
+        
+      if($payment->status->value === PaymentStatus::PAID->value){
+        $payment->update([
+          'paid_at' => now()
+        ]);
+      }  
     }
 
     $totalPaid = Payment::where('income_id', $income->income_id)

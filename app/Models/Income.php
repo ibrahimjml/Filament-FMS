@@ -46,6 +46,8 @@ protected $attributes = [
     'discount_amount',
     'final_amount',
     'status',
+    'is_priority',
+    'recurring_count',
     'payment_type',
     'description',
     'next_payment',
@@ -61,10 +63,6 @@ protected $attributes = [
   {
     return $this->belongsTo(Subcategory::class, 'subcategory_id');
   }
-  // public function category(): BelongsTo
-  // {
-  //   return $this->subcategory()->category();
-  // }
 
   public function discount(): BelongsTo
   {

@@ -1,5 +1,6 @@
 <x-filament-panels::page>
-  <div class="max-w-4xl mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8">
+
+  <div class="print-invoice max-w-4xl mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8">
 
     {{-- Header --}}
     <div class="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-6">
@@ -20,7 +21,7 @@
     </div>
 
     {{-- Billing To Information --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+    <div class="billing grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <div>
         <h2 class="font-semibold text-gray-700 dark:text-gray-200 mb-2">
           Billed From
@@ -144,3 +145,37 @@
 </div>
   </div>
 </x-filament-panels::page>
+
+@push('styles')
+<style>
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    .print-invoice,
+    .print-invoice * {
+        visibility: visible !important;
+    }
+
+    .print-invoice {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+    }
+    .billing{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+}
+</style>
+@endpush
+@push('scripts')
+<script>
+    window.addEventListener('print-invoice', () => {
+        window.print();
+    });
+</script>
+@endpush

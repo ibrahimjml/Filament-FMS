@@ -2,26 +2,32 @@
 
 namespace App\Filament\Resources\Incomes\Tables;
 
-
+use App\Filament\Resources\Incomes\IncomeResource;
+use App\Filament\Resources\Incomes\Pages\IncomePayments;
+use App\Models\Income;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Grouping\Group;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Enums\FontWeight;
-
+use Illuminate\Database\Eloquent\Builder;
 
 class IncomesTable
 {
   public static function configure(Table $table): Table
   {
-
     return $table
       ->reorderableColumns()
       ->columnManagerColumns(2)
@@ -35,7 +41,7 @@ class IncomesTable
               ->label('Client')
               ->weight(FontWeight::Bold)
               ->state(fn($record) => "{$record->client?->full_name}")
-              ->extraAttributes(['class' => 'text-2xl capitalize pb-1'])
+              ->extraAttributes(['class' => 'text-xl capitalize pb-1 w-full'])
               ->searchable(),
             TextColumn::make('subcategory.sub_name')
               ->icon('heroicon-m-tag')
@@ -119,7 +125,8 @@ class IncomesTable
               ->sortable()
               ->toggleable(isToggledHiddenByDefault: true),
           ]),
-        ])->extraAttributes(['class' => 'flex gap-3 '])
+        ])
+        ->extraAttributes(['class' => 'flex gap-3'])
       ])
       ->groups([
         Group::make('client.full_name')
@@ -148,9 +155,33 @@ class IncomesTable
       ])
 
       ->recordActions([
-
-        ViewAction::make(),
-        EditAction::make(),
+        Action::make('is_priority')
+          ->hiddenLabel()
+          ->icon(fn($record) => $record->is_priority ? 'heroicon-s-shield-exclamation' : 'heroicon-o-shield-exclamation')
+          ->color(fn($record) => $record->is_priority ? 'warning' : 'gray')
+          ->size('xl')
+          ->action(function ($record) {
+            $record->is_priority = !$record->is_priority;
+            $record->save();
+          })
+          ->successNotification(function ($record) {
+            if ($record->is_priority) {
+              return Notification::make()
+                ->success()
+                ->title(__('Priority'))
+                ->body(__('Added to priority list'));
+            }
+          }),
+        Action::make('milestone')
+          ->label(fn(Income $record) => $record->paidPayments->count() . ' / ' . $record->recurring_count)
+          ->icon('heroicon-m-flag')
+          ->color('gray')
+          ->url(fn(Income $record): string => IncomeResource::getUrl('payments', ['record' => $record->income_id])),
+        ActionGroup::make([
+          ViewAction::make(),
+          EditAction::make(),
+          DeleteAction::make(),
+        ])->color('gray')
       ])
       ->toolbarActions([
 

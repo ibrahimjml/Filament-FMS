@@ -117,8 +117,16 @@ class IncomeForm
                       ->label(__('Payment Type'))
                       ->options(PaymentType::options())
                       ->descriptions(PaymentType::descriptions())
+                      ->reactive()
                       ->required(),
                   ])->columns(1),
+                TextInput::make('recurring_count')
+                  ->label(__('Recurring Count'))
+                  ->hint(__('please choose the total recurring payment count'))
+                  ->visible(fn(callable $get) => $get('payment_type') === PaymentType::RECURRING->value)
+                  ->maxValue(10)
+                  ->minValue(1)
+                  ->numeric(),
                 Select::make('payments.status')
                   ->label(__('Payment Status'))
                   ->options(PaymentStatus::options())
@@ -128,7 +136,7 @@ class IncomeForm
                   ->label(__('Next Payment'))
                   ->nullable()
                   ->visible(fn(callable $get) => $get('payments.status') === PaymentStatus::UNPAID->value)
-                  ->afterOrEqual(fn () => now()),
+                  ->afterOrEqual(fn() => now()),
               ])->columns(1),
           ])->columnSpan(['lg' => 1]),
       ])->columns(3);

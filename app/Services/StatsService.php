@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Enums\IncomeStatus;
+use App\Enums\InvoiceStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Client;
 use App\Models\Income;
+use App\Models\Invoice;
 use App\Models\Outcome;
 use App\Models\Payment;
 use Carbon\Carbon;
@@ -36,6 +38,8 @@ class StatsService
     $totalOutcome = $this->getTotalOtcome($start, $end);
     $totalClients = $this->getTotalClients($start, $end);
     $totalUpcomingPayments = $this->getTotalUpcomingPayments($start, $end);
+    $totalPaidInvoices = $this->getTotalPaidInvoices($start, $end);
+
 
 
 
@@ -46,6 +50,7 @@ class StatsService
       'incomes_chart' => $incomesChart,
       'profit'        => $totalIncome - $totalOutcome,
       'total_upcoming_payments' => $totalUpcomingPayments,
+      'total_paid_invoices' => $totalPaidInvoices,
 
     ];
   }
@@ -111,5 +116,23 @@ class StatsService
       })
       ->where('status', '!=', IncomeStatus::COMPLETED->value)
       ->count();
+  }
+  public function getTotalPaidInvoices($startDate, $endDate)
+  {
+    return Invoice::query()
+      ->where('status', InvoiceStatus::PAID->value)
+      ->whereHas('payments', function (Builder $q) {
+        $q->where('status', PaymentStatus::PAID->value);
+      })
+      ->withSum([
+        'payments as total_paid' => function (Builder $q) {
+          $q->where('status', PaymentStatus::PAID->value);
+        }
+      ], 'payment_amount')
+      ->when($startDate && $endDate, function (Builder $q) use ($startDate, $endDate) {
+        $q->whereBetween('created_at', [$startDate, $endDate]);
+      })
+      ->get()
+      ->sum('total_paid');
   }
 }
