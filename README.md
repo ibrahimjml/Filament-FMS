@@ -13,13 +13,13 @@
  ![Dashboard](https://i.postimg.cc/MK761CCf/Screenshot-2026-01-03-172519.png)
 ![Dashboard2](https://i.postimg.cc/ZqCzs2M7/Screenshot-2026-01-03-172604.png)
 ![Clients](https://i.postimg.cc/TPWHD6sB/Screenshot-2026-01-03-173034.png)
-![Incomes](https://i.postimg.cc/1RMM4Xtn/Screenshot-2026-01-03-173110.png)
+![Incomes](https://i.postimg.cc/Z5XpTkMC/Screenshot-2026-01-09-191213.png)
 ![Income detail](https://i.postimg.cc/4yKKJWnC/Screenshot-2026-01-03-173256.png)
 ![Categories](https://i.postimg.cc/WbgGg4px/Screenshot-2026-01-03-173001.png)
 ![Payments Schedule](https://i.postimg.cc/dt2V91Hr/Screenshot-2026-01-04-161241.png)
 ![Reports](https://i.postimg.cc/FRkdvPYN/Screenshot-2026-01-03-172756.png)
-![Invoice](https://i.postimg.cc/hjSqYFvv/Screenshot-2026-01-08-233653.png)
-![Invoices](https://i.postimg.cc/zX9YrH3G/Screenshot-2026-01-08-234657.png)
+![Invoice](https://i.postimg.cc/2yx76HZ3/Screenshot-2026-01-09-191342.png)
+![Invoices](https://i.postimg.cc/j5Hzg8vj/Screenshot-2026-01-09-191252.png)
 
 ## INSTALLATION
 
