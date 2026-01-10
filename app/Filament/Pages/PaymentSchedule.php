@@ -10,13 +10,22 @@ use Filament\Pages\Page;
 use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use UnitEnum;
 
 class PaymentSchedule extends Page implements HasForms
 {
   use InteractsWithForms;
   protected string $view = 'filament.pages.payment-schedule';
   protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar-date-range';
-  protected static ?string $navigationLabel = 'Payments Schedule';
+    protected static ?int $navigationSort = 1;
+  public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Schedules');
+  }
+  public static function getNavigationLabel(): string
+  {
+    return __('Payments Schedule');
+  }
   protected $listeners = ['paymentPriority' => '$refresh'];
   public function getHeading(): ?string
   {
