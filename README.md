@@ -20,6 +20,7 @@
 ![Reports](https://i.postimg.cc/FRkdvPYN/Screenshot-2026-01-03-172756.png)
 ![Invoice](https://i.postimg.cc/2yx76HZ3/Screenshot-2026-01-09-191342.png)
 ![Invoices](https://i.postimg.cc/j5Hzg8vj/Screenshot-2026-01-09-191252.png)
+![full calendar](https://i.postimg.cc/cLH03ZRn/Screenshot-2026-01-10-130308.png)
 
 ## INSTALLATION
 
