@@ -38,26 +38,26 @@ class InvoicesTable
                   ->searchable()
                   ->sortable(),
                   TextColumn::make('amount')
-                      ->label(__('amount'))
+                      ->label(__('Amount'))
                       ->money()
                       ->sortable(),
                 TextColumn::make('payment_amount')
-                    ->label(__('paid'))
+                    ->label(__('Paid'))
                     ->state(fn($record) => $record->payments?->sum('payment_amount'))
                     ->money()
                     ->sortable(),
                     TextColumn::make('status')
-                        ->label(__('status'))
+                        ->label(__('Status'))
                         ->badge()
                         ->color(fn($record) => $record->status?->getColor())
                         ->state(fn($record) => $record->status?->getLabel())
                         ->searchable(),
                     TextColumn::make('description')
-                        ->label(__('description'))
+                        ->label(__('Description'))
                         ->state(fn($record) => $record->description ?? 'N/A')
                         ->html(),
                 TextColumn::make('issue_date')
-                    ->label(__('issue date'))
+                    ->label(__('Issue Date'))
                     ->icon('heroicon-o-calendar')
                     ->date()
                     ->sortable(),

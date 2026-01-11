@@ -22,6 +22,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DiscountResource extends Resource
 {
@@ -32,7 +33,14 @@ class DiscountResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Finance';
 
     protected static ?int $navigationSort = 3;
-
+    public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Finance');
+  }
+    public static function getNavigationLabel(): string
+  {
+    return __('Discounts');
+  }
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema

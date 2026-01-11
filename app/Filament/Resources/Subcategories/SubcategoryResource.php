@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Subcategories;
 
+use App\Filament\Resources\Categories\CategoryResource;
 use App\Filament\Resources\Subcategories\Pages\ManageSubcategories;
 use App\Models\Subcategory;
 use BackedEnum;
@@ -27,6 +28,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\App;
+use UnitEnum;
 
 class SubcategoryResource extends Resource
 {
@@ -34,7 +36,10 @@ class SubcategoryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQueueList;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+    public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Catalog');
+  }
 
     protected static ?int $navigationSort = 2;
 
@@ -42,15 +47,17 @@ class SubcategoryResource extends Resource
     {
         return __('Subcategories');
     }
-
+    public static function getModelLabel(): string
+{
+    return __('Subcategory');
+}
     protected static ?string $recordTitleAttribute = 'sub_name';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Fieldset::make('choose')
-                ->label(__('Select A Preferred Category'))
+                Fieldset::make(__('Select A Preferred Category'))
                     ->schema([
                         Select::make('category_id')
                             ->label(__('Category'))
@@ -58,24 +65,15 @@ class SubcategoryResource extends Resource
                             ->searchable()
                             ->preload(true)
                             ->required()
-                            ->hint(strtoupper(app()->getLocale()))
-                            ->createOptionForm([
-                                TextInput::make('category_name')
-                                    ->required(),
-                            ])
-                            ->createOptionAction(
-                                fn (Action $action) => $action
-                                    ->icon('heroicon-m-plus')
-                                    ->label(__('Add Category'))
-                            ),
+                            ->createOptionForm(fn(Schema $schema) => CategoryResource::form($schema)),
                     ])->columnSpanFull(),
-                Fieldset::make('new sub')
-                ->label(__('new subcategory name'))
+                Fieldset::make(__('Create a new subcategory'))
                     ->schema([
                         TextInput::make('sub_name')
-                            ->label(__('Name'))
+                            ->label(__('Subcategory Name'))
                             ->required()
-                            ->hint(strtoupper(app()->getLocale())),
+                            ->hint(__('translation-lang.editing_in', ['lang' => __('translation-lang.lang.' . app()->getLocale()),]))
+
 
                     ])->columnSpanFull(),
             ]);

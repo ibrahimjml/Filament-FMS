@@ -20,7 +20,7 @@ class ListIncomes extends ListRecords
       'all' => Tab::make()
         ->label(__('All')),
       'priority' => Tab::make()
-        ->label(__('Priority'))
+        ->label(__('By Priority'))
         ->badge(fn() => Income::query()->where('is_priority', true)->count())
         ->badgeColor('warning')
         ->icon('heroicon-m-shield-exclamation')
@@ -59,7 +59,8 @@ class ListIncomes extends ListRecords
   protected function getHeaderActions(): array
   {
     return [
-      CreateAction::make(),
+      CreateAction::make()
+        ->label(__('Create Income')),
     ];
   }
 }

@@ -16,7 +16,7 @@ class PaidInvoices extends StatsOverviewWidget
   {
     return [
       Stat::make(__('Total Paid Invoices'), '$ ' . number_format($this->getTotalPaid()))
-        ->description(__('Alltime Total Paid Invoices '))
+        ->description(__('Total Paid Invoices'))
         ->icon('heroicon-m-receipt-percent')
         ->color('primary'),
     ];

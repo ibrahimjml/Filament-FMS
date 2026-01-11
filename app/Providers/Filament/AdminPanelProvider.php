@@ -37,7 +37,7 @@ class AdminPanelProvider extends PanelProvider
       ->path('/')
       ->login()
       ->sidebarFullyCollapsibleOnDesktop()
-      ->brandName(__('Management System'))
+      ->brandName(fn () => __('Management System'))
       ->databaseNotifications()
       ->userMenuItems([
         'profile' => Action::make('profile')

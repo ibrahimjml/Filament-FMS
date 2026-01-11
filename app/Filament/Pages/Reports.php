@@ -24,7 +24,14 @@ class Reports extends Page implements HasForms, HasTable
   use InteractsWithForms, InteractsWithTable;
 
   protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
-  protected static ?string $navigationLabel = 'Reports';
+    public static function getNavigationLabel(): string
+  {
+    return __('Reports');
+  }
+  public function getTitle(): string
+{
+    return __('Reports');
+}
   protected string $view = 'filament.pages.reports';
 
   public ?string $from = null;

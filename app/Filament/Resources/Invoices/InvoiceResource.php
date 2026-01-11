@@ -20,52 +20,60 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class InvoiceResource extends Resource
 {
-    protected static ?string $model = Invoice::class;
+  protected static ?string $model = Invoice::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ReceiptPercent;
-        public static function getNavigationLabel(): string
+  protected static string|BackedEnum|null $navigationIcon = Heroicon::ReceiptPercent;
+  public static function getNavigationLabel(): string
+  {
+    return __('Invoices');
+  }
+  public static function getPluralLabel(): string
     {
         return __('Invoices');
     }
-    public static function form(Schema $schema): Schema
-    {
-        return InvoiceForm::configure($schema);
-    }
+    public static function getModelLabel(): string
+{
+    return __('Invoice');
+}
+  public static function form(Schema $schema): Schema
+  {
+    return InvoiceForm::configure($schema);
+  }
 
 
-    public static function table(Table $table): Table
-    {
-        return InvoicesTable::configure($table);
-    }
+  public static function table(Table $table): Table
+  {
+    return InvoicesTable::configure($table);
+  }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
+  public static function getRelations(): array
+  {
+    return [
+      //
+    ];
+  }
 
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListInvoices::route('/'),
-            'create' => CreateInvoice::route('/create'),
-            'edit' => EditInvoice::route('/{record}/edit'),
-            'view' => PageInvoice::route('/{record}/invoice'),
-        ];
-    }
+  public static function getPages(): array
+  {
+    return [
+      'index' => ListInvoices::route('/'),
+      'create' => CreateInvoice::route('/create'),
+      'edit' => EditInvoice::route('/{record}/edit'),
+      'view' => PageInvoice::route('/{record}/invoice'),
+    ];
+  }
 
-    public static function getRecordRouteBindingEloquentQuery(): Builder
-    {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
-    public static function getWidgets(): array
-    {
-      return [
-         PaidInvoices::class
-      ];
-    }
+  public static function getRecordRouteBindingEloquentQuery(): Builder
+  {
+    return parent::getRecordRouteBindingEloquentQuery()
+      ->withoutGlobalScopes([
+        SoftDeletingScope::class,
+      ]);
+  }
+  public static function getWidgets(): array
+  {
+    return [
+      PaidInvoices::class
+    ];
+  }
 }

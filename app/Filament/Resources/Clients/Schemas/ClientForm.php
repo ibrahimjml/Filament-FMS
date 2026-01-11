@@ -14,20 +14,18 @@ class ClientForm
     {
         return $schema
             ->components([
-                Fieldset::make('full name')
-                    ->label(__('Full Name'))
+                Fieldset::make(__('Full Name'))
                     ->schema([
                         TextInput::make('client_fname')
                             ->label(__('Client First'))
                             ->required()
-                            ->hint(strtoupper(app()->getLocale())),
+                            ->hint(__('translation-lang.editing_in', ['lang' => __('translation-lang.lang.' . app()->getLocale()),])),
                         TextInput::make('client_lname')
                             ->label(__('Client Last'))
                             ->required()
-                            ->hint(strtoupper(app()->getLocale())),
+                            ->hint(__('translation-lang.editing_in', ['lang' => __('translation-lang.lang.' . app()->getLocale()),])),
                     ])->columns(1),
-                Fieldset::make('client type')
-                    ->label(__('client type'))
+                Fieldset::make(__('choose a preffered type'))
                     ->schema([
                         Select::make('types')
                             ->label(__('Type'))
@@ -46,8 +44,7 @@ class ClientForm
                                 ->label(__('Type Name'))
                             ),
                     ])->columns(1),
-                Fieldset::make('info')
-                    ->label(__('info'))
+                Fieldset::make(__('Info about client'))
                     ->schema([
                         TextInput::make('client_phone')
                             ->label(__('Phone'))

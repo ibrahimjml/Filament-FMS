@@ -15,14 +15,22 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class OutcomesResource extends Resource
 {
     protected static ?string $model = Outcome::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowTrendingDown;
-    protected static string|\UnitEnum|null $navigationGroup = 'Finance';
+  public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Finance');
+  }
     protected static ?int $navigationSort = 2;
+      public static function getNavigationLabel(): string
+  {
+    return __('Outcomes');
+  }
     protected static ?string $recordTitleAttribute = 'outcome';
 
     public static function form(Schema $schema): Schema

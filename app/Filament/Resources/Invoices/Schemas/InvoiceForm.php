@@ -26,11 +26,12 @@ class InvoiceForm
               ->schema([
                 Grid::make(1)
                   ->schema([
-                    Fieldset::make(__('relation info'))
+                    Fieldset::make(__('Relation Info'))
                       ->schema([
 
 
                         TextInput::make('invoice_number')
+                          ->label(__('Invoice Number'))
                           ->prefix('INV -')
                           ->required()
                           ->afterStateUpdated(function ($state, Set $set) {
@@ -39,7 +40,7 @@ class InvoiceForm
                             }
                           }),
                         Select::make('client_id')
-                          ->label(__('Client'))
+                          ->label(__('Client Name'))
                           ->relationship('client', 'client_fname', modifyQueryUsing: fn($query) => $query->with('translation'))
                           ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name)
                           ->searchable()
@@ -48,7 +49,7 @@ class InvoiceForm
                           ->required(),
 
                         Select::make('income_id')
-                          ->label(__('Income'))
+                          ->label(__('Incomes'))
                           ->options(
                             fn(Get $get) =>
                             $get('client_id')
@@ -66,7 +67,7 @@ class InvoiceForm
                           ->required(),
 
                         Select::make('payment_id')
-                          ->label(__('Payment'))
+                          ->label(__('Payments'))
                           ->multiple()
                           ->reactive()
                           ->searchable()
@@ -96,7 +97,7 @@ class InvoiceForm
                   ]),
                 Grid::make(1)
                   ->schema([
-                    Fieldset::make(__('invoice detail'))
+                    Fieldset::make(__('Invoice Detail'))
                       ->schema([
 
                         Select::make('status')
@@ -106,7 +107,7 @@ class InvoiceForm
 
                         MarkdownEditor::make('description')
                           ->label(__('Description'))
-                          ->hint(__('Editing in ') . strtoupper(app()->getLocale()))
+                          ->hint(__('translation-lang.editing_in', ['lang' => __('translation-lang.lang.' . app()->getLocale()),]))
                           ->maxHeight(200)
                           ->nullable(),
                       ])->columns(1),

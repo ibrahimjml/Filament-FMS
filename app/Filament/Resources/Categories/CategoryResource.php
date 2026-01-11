@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rules\Enum;
+use UnitEnum;
 
 class CategoryResource extends Resource
 {
@@ -36,7 +37,10 @@ class CategoryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Catalog';
+    public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Catalog');
+  }
 
     protected static ?int $navigationSort = 1;
 
@@ -44,7 +48,10 @@ class CategoryResource extends Resource
     {
         return __('Categories');
     }
-
+    public static function getModelLabel(): string
+{
+    return __('Category');
+}
     protected static ?string $recordTitleAttribute = 'category_name';
 
     public ?string $activeTab = null;
@@ -53,13 +60,14 @@ class CategoryResource extends Resource
     {
         return $schema
             ->components([
-                Fieldset::make('new category')
+                Fieldset::make(__('Create a new category'))
                     ->schema([
                         TextInput::make('category_name')
                             ->label(__('Category Name'))
+                            ->hint(__('translation-lang.editing_in', ['lang' => __('translation-lang.lang.' . app()->getLocale()),]))
                             ->required(),
                     ])->columnSpanFull(),
-                Fieldset::make('select category type')
+                Fieldset::make(__('Select a category type'))
                     ->schema([
                         Select::make('category_type')
                             ->label(__('Category Type'))
@@ -119,7 +127,7 @@ class CategoryResource extends Resource
                     ->action(fn ($livewire) => $livewire->activeTab = null),
 
                 Action::make('income')
-                    ->label(__('Income'))
+                    ->label(__('Incomes'))
                     ->color(fn ($livewire) => $livewire->activeTab === 'income' ? 'primary' : 'gray')
                     ->icon('heroicon-m-arrow-trending-up')
                     ->badge(fn () => Category::where('category_type', CategoryType::INCOME)->count())
@@ -128,7 +136,7 @@ class CategoryResource extends Resource
                     ->action(fn ($livewire) => $livewire->activeTab = 'income'),
 
                 Action::make('outcome')
-                    ->label(__('Outcome'))
+                    ->label(__('Outcomes'))
                     ->color(fn ($livewire) => $livewire->activeTab === 'outcome' ? 'primary' : 'gray')
                     ->icon('heroicon-m-arrow-trending-down')
                      ->badge(fn () => Category::where('category_type', CategoryType::OUTCOME)->count())

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Incomes\Tables;
 
+use App\Enums\PaymentType;
 use App\Filament\Resources\Incomes\IncomeResource;
-use App\Filament\Resources\Incomes\Pages\IncomePayments;
 use App\Models\Income;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -20,9 +20,8 @@ use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Enums\FontWeight;
-use Illuminate\Database\Eloquent\Builder;
+
 
 class IncomesTable
 {
@@ -40,14 +39,14 @@ class IncomesTable
               ->iconColor('info')
               ->label('Client')
               ->weight(FontWeight::Bold)
-              ->state(fn($record) => "{$record->client?->full_name}")
+              ->formatStateUsing(fn($record) => "{$record->client?->full_name}")
               ->extraAttributes(['class' => 'text-xl capitalize pb-1 w-full'])
               ->searchable(),
             TextColumn::make('subcategory.sub_name')
               ->icon('heroicon-m-tag')
               ->iconColor('warning')
               ->color('gray')
-              ->state(
+              ->formatStateUsing(
                 fn($record) =>
                 $record->subcategory?->name . ' - ' . $record->subcategory?->category?->name
               )
@@ -58,13 +57,12 @@ class IncomesTable
           Stack::make([
             TextColumn::make('amount')
               ->weight(FontWeight::SemiBold)
-              ->state(fn($record) => __('Amount') . ' : ' . number_format($record->amount, 2))
+              ->formatStateUsing(fn($record) => __('Amount') . ' : ' . number_format($record->amount, 2) . ' $')
               ->icon('heroicon-m-currency-dollar')
               ->iconColor('primary')
               ->sortable(),
             TextColumn::make('final_amount')
-              ->money()
-              ->state(fn($record) => __('Final') . ' : ' . number_format($record->final_amount, 2))
+              ->formatStateUsing(fn($record) => __('Final Amount') . ' : ' . number_format($record->final_amount, 2) . ' $')
               ->weight(FontWeight::SemiBold)
               ->icon('heroicon-m-currency-dollar')
               ->iconColor('primary')
@@ -73,28 +71,28 @@ class IncomesTable
 
           Stack::make([
             TextColumn::make('total_paid')
-              ->money()
               ->icon('heroicon-m-currency-dollar')
               ->iconColor('primary')
               ->weight(FontWeight::SemiBold)
-              ->state(fn($record) => __('Paid') . ' : ' . number_format($record->total_paid, 2)),
+              ->formatStateUsing(fn($record) => __('Paid') . ' : ' . number_format($record->total_paid, 2) . ' $'),
             TextColumn::make('remaining')
-              ->money()
               ->weight(FontWeight::SemiBold)
               ->icon('heroicon-m-currency-dollar')
               ->iconColor('primary')
-              ->state(fn($record) => __('Remaining') . ' : ' . number_format($record->remaining, 2))
+              ->formatStateUsing(fn($record) => __('Remaining') . ' : ' . number_format($record->remaining, 2) . ' $')
 
           ]),
 
           Stack::make([
             TextColumn::make('status')
               ->icon(fn($state) => $state?->icon())
+              ->formatStateUsing(fn($state) => $state?->getLabel())
               ->badge()
               ->sortable()
               ->searchable(),
             TextColumn::make('payment_type')
               ->icon(fn($state) => $state?->icon())
+              ->formatStateUsing(fn($state) => $state?->getLabel())
               ->badge()
               ->searchable(),
 
@@ -102,23 +100,23 @@ class IncomesTable
 
           Stack::make([
             TextColumn::make('next_payment')
-              ->date(fn($state) => $state?->format('m-d-Y'))
+              ->date()
               ->icon('heroicon-m-calendar')
               ->iconColor('primary')
-              ->prefix('Due date: ')
+              ->formatStateUsing(fn($record) => __('Next Payment') . ' : ' . $record->next_payment->format('m-d-Y'))
               ->sortable()
               ->extraAttributes(['class' => 'text-green-400']),
             TextColumn::make('created_at')
-              ->date(fn($state) => $state?->format('m-d-Y'))
+              ->date()
               ->icon('heroicon-m-plus-circle')
               ->iconColor('warning')
-              ->prefix('Created: ')
+              ->formatStateUsing(fn($record) => __('Created At') . ' : ' . $record->created_at->format('m-d-Y'))
               ->sortable(),
             TextColumn::make('updated_at')
-              ->date(fn($state) => $state?->format('m-d-Y'))
+              ->date()
               ->icon('heroicon-m-pencil-square')
               ->iconColor('info')
-              ->prefix('Edited: ')
+              ->formatStateUsing(fn($record) => __('Updated At') . ' : ' . $record->updated_at->format('m-d-Y'))
               ->sortable(),
             TextColumn::make('deleted_at')
               ->date(fn($state) => $state?->format('m/d/Y'))
@@ -126,7 +124,7 @@ class IncomesTable
               ->toggleable(isToggledHiddenByDefault: true),
           ]),
         ])
-        ->extraAttributes(['class' => 'flex gap-3'])
+          ->extraAttributes(['class' => 'flex gap-3'])
       ])
       ->groups([
         Group::make('client.full_name')
@@ -176,6 +174,7 @@ class IncomesTable
           ->label(fn(Income $record) => $record->paidPayments->count() . ' / ' . $record->recurring_count)
           ->icon('heroicon-m-flag')
           ->color('gray')
+          ->visible(fn(Income $record) => $record->payment_type === PaymentType::RECURRING)
           ->url(fn(Income $record): string => IncomeResource::getUrl('payments', ['record' => $record->income_id])),
         ActionGroup::make([
           ViewAction::make(),

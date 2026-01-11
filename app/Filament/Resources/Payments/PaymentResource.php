@@ -17,14 +17,22 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
     protected static bool $shouldRegisterNavigation = true;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
-    protected static string|\UnitEnum|null $navigationGroup = 'Finance';
     protected static ?int $navigationSort = 2;
+   public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Finance');
+  }
+    public static function getNavigationLabel(): string
+  {
+    return __('Payments');
+  }
     public static function canCreate(): bool
     {
       return false;

@@ -22,6 +22,7 @@ use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class IncomeResource extends Resource
 {
@@ -30,12 +31,23 @@ class IncomeResource extends Resource
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowTrendingUp;
-    protected static string|\UnitEnum|null $navigationGroup = 'Finance';
+   public static function getNavigationGroup(): string|UnitEnum|null
+  {
+    return __('Finance');
+  }
     protected static ?int $navigationSort = 1;
       public static function getNavigationLabel(): string
     {
         return __('Incomes');
     }
+      public static function getPluralLabel(): string
+    {
+        return __('Incomes');
+    }
+  public static function getModelLabel(): string
+{
+    return __('Income');
+}
     public static function form(Schema $schema): Schema
     {
         return IncomeForm::configure($schema);

@@ -41,11 +41,11 @@ class ListInvoices extends ListRecords
   {
     return [
       CreateAction::make()
-        ->label(__('Create'))
+        ->label(__('Create Invoice'))
         ->icon('heroicon-o-plus')
         ->color('success'),
       Action::make('setting')
-        ->label(__('Setting'))
+        ->label(__('Invoice Setting'))
         ->icon('heroicon-o-cog-8-tooth')
         ->color('info')
         ->url(fn() => InvoiceSetting::getUrl())
